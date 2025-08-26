@@ -1,4 +1,3 @@
-
 // pkcs11mod
 // Copyright (C) 2018-2022  Namecoin Developers
 //
@@ -92,7 +91,12 @@ func toTemplate(clist C.CK_ATTRIBUTE_PTR, size C.CK_ULONG) []*pkcs11.Attribute {
 		//nolint:wsl // Ignore commented-out miekg line
 		if int(c.ulValueLen) != -1 {
 			buf := unsafe.Pointer(C.getAttributePval(c))
-			x.Value = C.GoBytes(buf, C.int(c.ulValueLen))
+			if buf != nil {
+				x.Value = C.GoBytes(buf, C.int(c.ulValueLen))
+			} else {
+				log.Printf("⚠️ [toTemplate] Attr 0x%X has nil value pointer (ulValueLen=%d) — using dummy []byte{}", x.Type, c.ulValueLen)
+				x.Value = []byte{}
+			}
 			// C.free(buf) // Removed compared to miekg implementation since it's not desired here
 		}
 
