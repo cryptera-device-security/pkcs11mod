@@ -22,7 +22,7 @@ import (
 
 	"github.com/miekg/pkcs11/p11"
 
-	"github.com/namecoin/pkcs11mod/p11mod"
+	"github.com/cryptera-device-security/pkcs11mod/p11mod"
 )
 
 func init() {
